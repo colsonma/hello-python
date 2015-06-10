@@ -18,7 +18,7 @@ r.set("hit_counter", 1)
 
 @app.route('/')
 def hello():
-	r.inc("hit_counter")
+	r.incr("hit_counter")
  
 	return """
 	<html>
