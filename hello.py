@@ -1,6 +1,8 @@
 import os
 import uuid
+import urlparse
 import redis
+import json
 from flask import Flask
 app = Flask(__name__)
 my_uuid = str(uuid.uuid1())
@@ -16,9 +18,9 @@ r.set("hit_counter", 1)
 
 @app.route('/')
 def hello():
- r.inc("hit_counter")
+	r.inc("hit_counter")
  
- return """
+	return """
 	<html>
 	<body bgcolor="{}">
 
