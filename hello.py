@@ -1,6 +1,6 @@
 import os
 import uuid
-import Redis
+import redis
 from flask import Flask
 app = Flask(__name__)
 my_uuid = str(uuid.uuid1())
@@ -18,7 +18,7 @@ r.set("hit_counter", 1)
 def hello():
  r.inc("hit_counter")
  
-	return """
+ return """
 	<html>
 	<body bgcolor="{}">
 
