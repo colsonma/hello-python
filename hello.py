@@ -3,8 +3,7 @@ import uuid
 import urlparse
 import redis
 import json
-import twitter
-import Tkinter
+from TwitterAPI import TwitterAPI
 import newrelic.agent
 newrelic.agent.initialize('newrelic.ini')
 from flask import Flask
@@ -20,27 +19,19 @@ credentials = rediscloud_service['credentials']
 r = redis.Redis(host=credentials['hostname'], port=credentials['port'], password=credentials['password'])
 r.set("hit_counter", 1)
 
-api = twitter.Api(
- access_consumer_key = os.environ['access_consumer_key'],
- access_consumer_secret = os.environ['access_consumer_secret']
- access_token_key = os.environ['access_token_key']
- access_token_secret = os.environ['access_token_secret']
-)
+CONSUMER_KEY = os.environ['access_consumer_key']
+CONSUMER_SECRET = os.environ['access_consumer_secret']
+ACCESS_TOKEN_KEY = os.environ['access_token_key']
+ACCESS_TOKEN_SECRET = os.environ['access_token_secret']
 
-search = api.GetSearch(
-    term=raw_input("Search Term"),
-    lang='en',
-    result_type='recent',
-    count=100,
-    max_id=''
-)
+TRACK_TERM = 'DevOps'
 
-for t in search:
-    print t.user.screen_name + ' (' + t.created_at + ')'
-    #Add the .encode to force encoding
-    print t.text.encode('utf-8')
-    print ''
+api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
+t = api.request('statuses/filter', {'track': TRACK_TERM})
+for item in t:
+	print (item['text'] if 'text' in item else item
+	       
 @app.route('/')
 def hello():
 	r.incr("hit_counter")
@@ -59,13 +50,11 @@ def hello():
 
 	</body>
 	</html>
-	""".format(COLOR,my_uuid,r.get("hit_counter"),search("Search Term"))
+	""".format(COLOR,my_uuid,r.get("hit_counter"),t.get('text')
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=int(os.getenv('VCAP_APP_PORT', '5000')))
-	 app = simpleapp_tk(None)
-	 app.title('Twitter Search')
-	 app.mainloop()
+	
 
 
 
