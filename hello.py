@@ -6,7 +6,7 @@ import json
 import sys
 import codecs
 from datetime import datetime
-from TwitterAPI import TwitterAPI, TwitterOAuth
+from TwitterAPI import TwitterAPI
 CONSUMER_KEY = os.environ['access_consumer_key']
 CONSUMER_SECRET = os.environ['access_consumer_secret']
 ACCESS_TOKEN_KEY = os.environ['access_token_key']
