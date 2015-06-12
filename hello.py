@@ -3,6 +3,9 @@ import uuid
 import urlparse
 import redis
 import json
+import newrelic
+from sys import exit
+from random import randint
 from flask import Flask
 app = Flask(__name__)
 my_uuid = str(uuid.uuid1())
@@ -15,6 +18,8 @@ rediscloud_service = json.loads(os.environ['VCAP_SERVICES'])['rediscloud'][0]
 credentials = rediscloud_service['credentials']
 r = redis.Redis(host=credentials['hostname'], port=credentials['port'], password=credentials['password'])
 r.set("hit_counter", 1)
+
+newrelic.agent.initialiaze('newrelic.ini')
 
 @app.route('/')
 def hello():
@@ -29,6 +34,7 @@ def hello():
 	<center><h1><font color="black">Hit Counter:<br/>
 	{}
 	</center>
+
 	</body>
 	</html>
 	""".format(COLOR,my_uuid,r.get("hit_counter"))
