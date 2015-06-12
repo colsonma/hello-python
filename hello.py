@@ -1,7 +1,7 @@
 import os
 import uuid
 import urlparse
-import rediscloud
+import redis
 import json
 import sys
 import codecs
