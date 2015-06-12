@@ -1,7 +1,7 @@
 import os
 import uuid
 import urlparse
-import redis
+import rediscloud
 import json
 import sys
 import codecs
@@ -12,20 +12,22 @@ CONSUMER_SECRET = os.environ['access_consumer_secret']
 ACCESS_TOKEN_KEY = os.environ['access_token_key']
 ACCESS_TOKEN_SECRET = os.environ['access_token_secret']
 
-o.CONSUMER_KEY = os.environ['access_consumer_key']
-o.CONSUMER_SECRET = os.environ['access_consumer_secret']
-o.ACCESS_TOKEN_KEY = os.environ['access_token_key']
-o.ACCESS_TOKEN_SECRET = os.environ['access_token_secret']
+#o.CONSUMER_KEY = os.environ['access_consumer_key']
+#o.CONSUMER_SECRET = os.environ['access_consumer_secret']
+#o.ACCESS_TOKEN_KEY = os.environ['access_token_key']
+#o.ACCESS_TOKEN_SECRET = os.environ['access_token_secret']
 
 TRACK_TERM = 'DevOps'
 
 api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
-api = TwitterOAuth(o.CONSUMER_KEY, o.CONSUMER_SECRET, o.ACCESS_TOKEN_KEY, o.ACCESS_TOKEN_SECRET)
+#api = TwitterOAuth(o.CONSUMER_KEY, o.CONSUMER_SECRET, o.ACCESS_TOKEN_KEY, o.ACCESS_TOKEN_SECRET)
 
 t = api.request('statuses/filter', {'track': TRACK_TERM})
 
+all_the_tweets = ""
 for item in t:
-	print (item['text'] if 'text' in item else item
+    if 'text' in item:
+            all_the_tweets += item['text'] 
 
 import newrelic.agent
 newrelic.agent.initialize('newrelic.ini')
@@ -61,7 +63,7 @@ def hello():
 
 	</body>
 	</html>
-	""".format(COLOR,my_uuid,r.get("hit_counter"),t.get('text')
+	""".format(COLOR,my_uuid,r.get("hit_counter"),all_the_tweets)
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=int(os.getenv('VCAP_APP_PORT', '5000')))
