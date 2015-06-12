@@ -3,9 +3,8 @@ import uuid
 import urlparse
 import redis
 import json
-import newrelic
-from sys import exit
-from random import randint
+import newrelic.agent
+newrelic.agent.initialiaze('newrelic.ini')
 from flask import Flask
 app = Flask(__name__)
 my_uuid = str(uuid.uuid1())
@@ -19,7 +18,7 @@ credentials = rediscloud_service['credentials']
 r = redis.Redis(host=credentials['hostname'], port=credentials['port'], password=credentials['password'])
 r.set("hit_counter", 1)
 
-newrelic.agent.initialiaze('newrelic.ini')
+
 
 @app.route('/')
 def hello():
