@@ -3,7 +3,30 @@ import uuid
 import urlparse
 import redis
 import json
-from TwitterAPI import TwitterAPI
+import sys
+import codecs
+from datetime import datetime
+from TwitterAPI import TwitterAPI, TwitterOAuth
+CONSUMER_KEY = os.environ['access_consumer_key']
+CONSUMER_SECRET = os.environ['access_consumer_secret']
+ACCESS_TOKEN_KEY = os.environ['access_token_key']
+ACCESS_TOKEN_SECRET = os.environ['access_token_secret']
+
+o.CONSUMER_KEY = os.environ['access_consumer_key']
+o.CONSUMER_SECRET = os.environ['access_consumer_secret']
+o.ACCESS_TOKEN_KEY = os.environ['access_token_key']
+o.ACCESS_TOKEN_SECRET = os.environ['access_token_secret']
+
+TRACK_TERM = 'DevOps'
+
+api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
+api = TwitterOAuth(o.CONSUMER_KEY, o.CONSUMER_SECRET, o.ACCESS_TOKEN_KEY, o.ACCESS_TOKEN_SECRET)
+
+t = api.request('statuses/filter', {'track': TRACK_TERM})
+
+for item in t:
+	print (item['text'] if 'text' in item else item
+
 import newrelic.agent
 newrelic.agent.initialize('newrelic.ini')
 from flask import Flask
@@ -19,19 +42,7 @@ credentials = rediscloud_service['credentials']
 r = redis.Redis(host=credentials['hostname'], port=credentials['port'], password=credentials['password'])
 r.set("hit_counter", 1)
 
-CONSUMER_KEY = os.environ['access_consumer_key']
-CONSUMER_SECRET = os.environ['access_consumer_secret']
-ACCESS_TOKEN_KEY = os.environ['access_token_key']
-ACCESS_TOKEN_SECRET = os.environ['access_token_secret']
-
-TRACK_TERM = 'DevOps'
-
-api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
-
-t = api.request('statuses/filter', {'track': TRACK_TERM})
-for item in t:
-	print (item['text'] if 'text' in item else item
-	       
+  
 @app.route('/')
 def hello():
 	r.incr("hit_counter")
