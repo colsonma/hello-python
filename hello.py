@@ -4,7 +4,7 @@ import urlparse
 import redis
 import json
 import newrelic.agent
-newrelic.agent.initialiaze('newrelic.ini')
+newrelic.agent.initialize('newrelic.ini')
 from flask import Flask
 app = Flask(__name__)
 my_uuid = str(uuid.uuid1())
@@ -40,6 +40,5 @@ def hello():
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=int(os.getenv('VCAP_APP_PORT', '5000')))
-
 
 
